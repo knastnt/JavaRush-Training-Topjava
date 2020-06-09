@@ -3,23 +3,28 @@
 <html lang="ru">
 <head>
     <title>Meals</title>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/bootstrap.min.css"/>
 </head>
     <body>
         <h3><a href="index.html">Home</a></h3>
         <hr>
         <h2>Meals</h2>
-        <table>
-            <thead>
+        <table class="table table-hover">
+            <thead class="thead-dark">
                 <tr>
-                    <th>jjjj</th>
-                    <th>Тяжесть</th>
+                    <th>Дата</th>
+                    <th>Описание</th>
+                    <th>Калории</th>
+                    <th>Превышение</th>
                 </tr>
             </thead>
             <tbody>
                 <c:forEach items="${meals}" var="meal">
-                    <tr>
+                    <tr class="<c:if test="${meal.isExcess()}">table-danger</c:if>">
+                        <td>${meal.getDateTime()}</td>
                         <td>${meal.getDescription()}</td>
-                        <td>2расш</td>
+                        <td>${meal.getCalories()}</td>
+                        <td>${meal.isExcess()}</td>
                     </tr>
                 </c:forEach>
             </tbody>
