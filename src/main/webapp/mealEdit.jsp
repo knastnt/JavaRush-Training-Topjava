@@ -26,11 +26,19 @@
                     </div>
                     <div class="form-group">
                         <label for="description-input" class="col-form-label">Описание</label>
-                        <input class="form-control" type="text" id="description-input" placeholder="Описание" >
+                        <c:set var="description" value=""></c:set>
+                        <c:if test="${mealTo.getDescription()!=null}">
+                            <c:set var="description" value="${mealTo.getDescription()}"></c:set>
+                        </c:if>
+                        <input class="form-control" type="text" id="description-input" placeholder="Описание" value="${mealTo.getDescription()}">
                     </div>
                     <div class="form-group">
                         <label for="calories-input" class="col-xs-2 col-form-label">Калории</label>
-                        <input class="form-control" type="number" id="calories-input" placeholder="0" >
+                        <c:set var="calories" value=""></c:set>
+                        <c:if test="${mealTo.getCalories()!=null}">
+                            <c:set var="calories" value="${mealTo.getCalories()}"></c:set>
+                        </c:if>
+                        <input class="form-control" type="number" id="calories-input" placeholder="0" value="${calories}">
                     </div>
 
                     <button type="submit" class="btn btn-primary mb-3">Добавить</button>

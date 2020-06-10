@@ -49,7 +49,7 @@ public class Meal implements Cloneable, Comparable {
         return description;
     }
 
-    public int getCalories() {
+    public Integer getCalories() {
         return calories;
     }
 
