@@ -23,18 +23,30 @@ public class MealServlet extends HttpServlet {
 
     private MealsDAO mealsDAO = MealsDAOFabric.getMealsDAO();
 
+    private static String INSERT_OR_EDIT = "/mealEdit.jsp";
+    private static String LIST_MEALS = "/meals.jsp";
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("redirect to meals");
 
-        int caloriesPerDay = 2000;
+        String action = request.getParameter("action");
 
-        request.setAttribute("caloriesPerDay", caloriesPerDay);
+        if (action == null) {
+            int caloriesPerDay = 2000;
+            request.setAttribute("caloriesPerDay", caloriesPerDay);
 
-        List<Meal> allMeals = mealsDAO.getAllMeals();
-        request.setAttribute("mealsTo", MealsUtil.filteredByTime(allMeals, null, null, caloriesPerDay));
+            List<Meal> allMeals = mealsDAO.getAllMeals();
+            request.setAttribute("mealsTo", MealsUtil.filteredByTime(allMeals, null, null, caloriesPerDay));
 
-        request.getRequestDispatcher("/meals.jsp").forward(request, response);
+            request.getRequestDispatcher(LIST_MEALS).forward(request, response);
+        }else{
+            switch (action.toLowerCase()){
+                case "new":
+
+                    break;
+            }
+        }
 //        response.sendRedirect("meals.jsp");
     }
 }

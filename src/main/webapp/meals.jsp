@@ -41,24 +41,6 @@
                     </tbody>
                 </table>
             </div>
-            <div class="row">
-                <form action="" method="post" class="shadow col">
-                    <div class="form-group">
-                        <label for="datetime-input" class="col-form-label">Время</label>
-                        <input class="form-control" type="datetime-local" placeholder="01.01.1970 00:00" id="datetime-input">
-                    </div>
-                    <div class="form-group">
-                        <label for="description-input" class="col-form-label">Описание</label>
-                        <input class="form-control" type="text" id="description-input" placeholder="Описание">
-                    </div>
-                    <div class="form-group">
-                        <label for="calories-input" class="col-xs-2 col-form-label">Калории</label>
-                        <input class="form-control" type="number" id="calories-input" placeholder="0">
-                    </div>
-
-                    <button type="submit" class="btn btn-primary mb-3">Добавить</button>
-                </form>
-            </div>
         </div>
     </body>
 </html>
