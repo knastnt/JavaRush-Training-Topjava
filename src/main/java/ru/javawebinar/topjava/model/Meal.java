@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
 
-public class Meal implements Cloneable {
+public class Meal implements Cloneable, Comparable {
     private Long id;
 
     private LocalDateTime dateTime;
@@ -81,5 +81,10 @@ public class Meal implements Cloneable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return this.getId().compareTo(((Meal)o).getId());
     }
 }
