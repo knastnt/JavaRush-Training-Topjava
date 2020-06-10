@@ -21,7 +21,7 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("redirect to meals");
 
-        request.setAttribute("meals", MealsUtil.filteredByTime(Initializier.meals, null, null, 2000));
+        request.setAttribute("mealsTo", MealsUtil.filteredByTime(Initializier.meals, null, null, 2000));
 
         request.getRequestDispatcher("/meals.jsp").forward(request, response);
 //        response.sendRedirect("meals.jsp");
