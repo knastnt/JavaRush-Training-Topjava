@@ -12,9 +12,9 @@ public class Meal implements Cloneable, Comparable {
 
     private String description;
 
-    private int calories;
+    private Integer calories;
 
-    public Meal(Long id, LocalDateTime dateTime, String description, int calories) {
+    public Meal(Long id, LocalDateTime dateTime, String description, Integer calories) {
         this.id = id;
         this.dateTime = dateTime;
         this.description = description;

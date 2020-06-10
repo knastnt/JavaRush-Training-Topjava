@@ -31,15 +31,14 @@
                                 <td>${meal.getDescription()}</td>
                                 <td>${meal.getCalories()}</td>
                                 <td>
-                                    <a href="${requestScope['javax.servlet.forward.request_uri']}/1" class="btn btn-primary btn-sm">Изменить</a>
-                                    <form action="" method="delete" class="d-inline">
-                                        <button type="button" class="btn btn-danger btn-sm">Удалить</button>
-                                    </form>
+                                    <a href="${requestScope['javax.servlet.forward.request_uri']}?edit=${meal.getId()}" class="btn btn-primary btn-sm">Изменить</a>
+                                    <a href="${requestScope['javax.servlet.forward.request_uri']}?delete=${meal.getId()}" class="btn btn-danger btn-sm">Удалить</a>
                                 </td>
                             </tr>
                         </c:forEach>
                     </tbody>
                 </table>
+                <a href="${requestScope['javax.servlet.forward.request_uri']}?edit=0" class="btn btn-primary">Добавить</a>
             </div>
         </div>
     </body>

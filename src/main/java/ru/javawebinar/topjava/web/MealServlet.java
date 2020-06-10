@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -30,23 +31,40 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("redirect to meals");
 
-        String action = request.getParameter("action");
+        String edit = request.getParameter("edit");
+        String delete = request.getParameter("delete");
 
-        if (action == null) {
-            int caloriesPerDay = 2000;
-            request.setAttribute("caloriesPerDay", caloriesPerDay);
-
-            List<Meal> allMeals = mealsDAO.getAllMeals();
-            request.setAttribute("mealsTo", MealsUtil.filteredByTime(allMeals, null, null, caloriesPerDay));
-
-            request.getRequestDispatcher(LIST_MEALS).forward(request, response);
-        }else{
-            switch (action.toLowerCase()){
-                case "new":
-
-                    break;
+        if (edit == null) {
+            if (delete != null) {
+                mealsDAO.deleteMealById(Long.parseLong(delete));
             }
+            showMealsList(request, response);
+        }else{
+            showEditForm(Long.parseLong(edit), request, response);
         }
 //        response.sendRedirect("meals.jsp");
+    }
+
+    private void showMealsList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int caloriesPerDay = 2000;
+        request.setAttribute("caloriesPerDay", caloriesPerDay);
+
+        List<Meal> allMeals = mealsDAO.getAllMeals();
+        request.setAttribute("mealsTo", MealsUtil.filteredByTime(allMeals, null, null, caloriesPerDay));
+
+        request.getRequestDispatcher(LIST_MEALS).forward(request, response);
+    }
+
+    private void showEditForm(long id, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Meal meal;
+        if (id>0) {
+            meal = mealsDAO.getMealById(id);
+        }else{
+            meal = new Meal(null, LocalDateTime.now(), null, null);
+        }
+
+        request.setAttribute("mealTo", MealsUtil.createTo(meal, false));
+
+        request.getRequestDispatcher(INSERT_OR_EDIT).forward(request, response);
     }
 }

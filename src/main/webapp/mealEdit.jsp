@@ -8,23 +8,29 @@
 </head>
     <body>
         <div class="container">
-            <h3><a href="index.html">Home</a></h3>
-            <h2>Meals</h2>
-            <p>Максимальное число калорий в день: <b>${caloriesPerDay}</b></p>
+            <h3><a href="${pageContext.request.contextPath}/meals">Back</a></h3>
+            <h2>Meal</h2>
 
             <div class="row">
                 <form action="" method="post" class="shadow col">
+                    <input type="hidden" name="id" value="${mealTo.getId()}"/>
                     <div class="form-group">
                         <label for="datetime-input" class="col-form-label">Время</label>
-                        <input class="form-control" type="datetime-local" placeholder="01.01.1970 00:00" id="datetime-input">
+                        <c:set var="outDate" value=""></c:set>
+                        <c:if test="${mealTo.getDateTime()!=null}">
+                            <fmt:parseDate value="${mealTo.getDateTime()}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDate" type="both"/>
+                            <fmt:formatDate value="${parsedDate}" type="date" pattern="dd.MM.yyyy HH:mm" var="outDate"/>
+                        </c:if>
+
+                        <input class="form-control" type="datetime-local" placeholder="01.01.1970 00:00" id="datetime-input" value="${outDate}">
                     </div>
                     <div class="form-group">
                         <label for="description-input" class="col-form-label">Описание</label>
-                        <input class="form-control" type="text" id="description-input" placeholder="Описание">
+                        <input class="form-control" type="text" id="description-input" placeholder="Описание" >
                     </div>
                     <div class="form-group">
                         <label for="calories-input" class="col-xs-2 col-form-label">Калории</label>
-                        <input class="form-control" type="number" id="calories-input" placeholder="0">
+                        <input class="form-control" type="number" id="calories-input" placeholder="0" >
                     </div>
 
                     <button type="submit" class="btn btn-primary mb-3">Добавить</button>
