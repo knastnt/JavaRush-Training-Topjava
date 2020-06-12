@@ -23,15 +23,15 @@
                             <fmt:formatDate value="${parsedDate}" type="date" pattern="dd.MM.yyyy HH:mm" var="outDate"/>
                         </c:if>
 
-                        <input class="form-control" type="datetime-local" placeholder="01.01.1970 00:00" id="datetime-input" value="${outDate}">
+                        <input class="form-control" type="datetime-local" placeholder="01.01.1970 00:00" id="datetime-input" value="${outDate}" name="dateTime">
                     </div>
                     <div class="form-group">
                         <label for="description-input" class="col-form-label">Описание</label>
-                        <input class="form-control" type="text" id="description-input" placeholder="Описание" value="${mealTo.description == null ? "" : mealTo.description}">
+                        <input class="form-control" type="text" id="description-input" placeholder="Описание" value="${mealTo.description == null ? "" : mealTo.description}" name="description">
                     </div>
                     <div class="form-group">
                         <label for="calories-input" class="col-xs-2 col-form-label">Калории</label>
-                        <input class="form-control" type="number" id="calories-input" placeholder="0" value="${mealTo.calories == null ? "" : mealTo.calories}">
+                        <input class="form-control" type="number" id="calories-input" placeholder="0" value="${mealTo.calories == null ? "" : mealTo.calories}" name="calories">
                     </div>
 
                     <button type="submit" class="btn btn-primary mb-3">Добавить</button>

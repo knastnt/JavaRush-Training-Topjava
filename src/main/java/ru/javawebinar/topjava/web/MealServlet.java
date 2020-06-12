@@ -5,7 +5,9 @@ import ru.javawebinar.topjava.Initializier;
 import ru.javawebinar.topjava.dao.MealsDAO;
 import ru.javawebinar.topjava.dao.MealsDAOFabric;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.TimeUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -47,6 +49,28 @@ public class MealServlet extends HttpServlet {
             showEditForm(Long.parseLong(edit), request, response);
         }
 //        response.sendRedirect("meals.jsp");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+
+        MealsDAO mealsDAO = MealsDAOFabric.getMealsDAO();
+
+        Meal meal = new Meal(
+                req.getParameter("id").equals("") ? null : Long.parseLong(req.getParameter("id")),
+                TimeUtil.parseToLocalDateTime(req.getParameter("dateTime")),
+                req.getParameter("description"),
+                Integer.parseInt(req.getParameter("calories"))
+        );
+
+        if(!req.getParameter("id").equals("")) {
+            mealsDAO.updateMeal(meal);
+        }else{
+            mealsDAO.addMeal(meal);
+        }
+
+        resp.sendRedirect(req.getRequestURL().toString());
     }
 
     private void showMealsList(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

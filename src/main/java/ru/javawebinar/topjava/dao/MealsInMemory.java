@@ -34,7 +34,7 @@ public class MealsInMemory implements MealsDAO {
     public synchronized void updateMeal(Meal meal) {
         if (meal.getId() == null || meal.getId() < 1) throw new IllegalArgumentException();
         deleteMealById(meal.getId());
-        addMeal(meal.clone()); //Отвязываем отображение
+        mealDb.add(meal.clone()); //Отвязываем отображение
     }
 
     @Override
