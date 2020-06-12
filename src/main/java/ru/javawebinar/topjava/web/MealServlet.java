@@ -34,10 +34,14 @@ public class MealServlet extends HttpServlet {
         String edit = request.getParameter("edit");
         String delete = request.getParameter("delete");
 
+
+        if (delete != null) {
+            mealsDAO.deleteMealById(Long.parseLong(delete));
+            //Редиректим сюда же, но без Query https://stackoverflow.com/questions/16675191/get-full-url-and-query-string-in-servlet-for-both-http-and-https-requests/16675399
+            response.sendRedirect(request.getRequestURL().toString());
+            return;
+        }
         if (edit == null) {
-            if (delete != null) {
-                mealsDAO.deleteMealById(Long.parseLong(delete));
-            }
             showMealsList(request, response);
         }else{
             showEditForm(Long.parseLong(edit), request, response);

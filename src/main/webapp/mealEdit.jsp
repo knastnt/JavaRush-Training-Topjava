@@ -13,12 +13,13 @@
 
             <div class="row">
                 <form action="" method="post" class="shadow col">
-                    <input type="hidden" name="id" value="${mealTo.getId()}"/>
+<%--                    <jsp:useBean id="mealTo" scope="page" class="ru.javawebinar.topjava.model.MealTo"></jsp:useBean>--%>
+                    <input type="hidden" name="id" value="${mealTo.id}"/>
                     <div class="form-group">
                         <label for="datetime-input" class="col-form-label">Время</label>
                         <c:set var="outDate" value=""></c:set>
-                        <c:if test="${mealTo.getDateTime()!=null}">
-                            <fmt:parseDate value="${mealTo.getDateTime()}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDate" type="both"/>
+                        <c:if test="${mealTo.dateTime!=null}">
+                            <fmt:parseDate value="${mealTo.dateTime}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDate" type="both"/>
                             <fmt:formatDate value="${parsedDate}" type="date" pattern="dd.MM.yyyy HH:mm" var="outDate"/>
                         </c:if>
 
@@ -26,19 +27,11 @@
                     </div>
                     <div class="form-group">
                         <label for="description-input" class="col-form-label">Описание</label>
-                        <c:set var="description" value=""></c:set>
-                        <c:if test="${mealTo.getDescription()!=null}">
-                            <c:set var="description" value="${mealTo.getDescription()}"></c:set>
-                        </c:if>
-                        <input class="form-control" type="text" id="description-input" placeholder="Описание" value="${mealTo.getDescription()}">
+                        <input class="form-control" type="text" id="description-input" placeholder="Описание" value="${mealTo.description == null ? "" : mealTo.description}">
                     </div>
                     <div class="form-group">
                         <label for="calories-input" class="col-xs-2 col-form-label">Калории</label>
-                        <c:set var="calories" value=""></c:set>
-                        <c:if test="${mealTo.getCalories()!=null}">
-                            <c:set var="calories" value="${mealTo.getCalories()}"></c:set>
-                        </c:if>
-                        <input class="form-control" type="number" id="calories-input" placeholder="0" value="${calories}">
+                        <input class="form-control" type="number" id="calories-input" placeholder="0" value="${mealTo.calories == null ? "" : mealTo.calories}">
                     </div>
 
                     <button type="submit" class="btn btn-primary mb-3">Добавить</button>
