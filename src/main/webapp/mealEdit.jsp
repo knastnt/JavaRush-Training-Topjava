@@ -34,7 +34,7 @@
                         <input class="form-control" type="number" id="calories-input" placeholder="0" value="${mealTo.calories == null ? "" : mealTo.calories}" name="calories">
                     </div>
 
-                    <button type="submit" class="btn btn-primary mb-3">Добавить</button>
+                    <button type="submit" class="btn btn-primary mb-3">${mealTo.id == null ? "Добавить" : "Изменить"}</button>
                 </form>
             </div>
         </div>
