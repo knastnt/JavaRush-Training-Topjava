@@ -29,6 +29,7 @@ public class MealsUtil {
         return meals.stream()
                 .filter(meal -> TimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime))
                 .map(meal -> createTo(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
+                .sorted((o1, o2) -> o1.getDateTime().compareTo(o2.getDateTime()))
                 .collect(Collectors.toList());
     }
 
