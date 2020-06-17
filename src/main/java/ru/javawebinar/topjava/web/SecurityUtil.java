@@ -21,9 +21,4 @@ public class SecurityUtil {
     public static int authUserCaloriesPerDay() {
         return DEFAULT_CALORIES_PER_DAY;
     }
-
-    public static boolean isMealBelongsToAuthUser(Meal meal){
-        Objects.requireNonNull(meal);
-        return meal.getUserId() == SecurityUtil.authUserId();
-    }
 }
