@@ -11,13 +11,16 @@ public class MealTo {
 
     private final int calories;
 
+    private final int userId;
+
     private final boolean excess;
 
-    public MealTo(Integer id, LocalDateTime dateTime, String description, int calories, boolean excess) {
+    public MealTo(Integer id, LocalDateTime dateTime, String description, int calories, int userId, boolean excess) {
         this.id = id;
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
+        this.userId = userId;
         this.excess = excess;
     }
 
@@ -37,6 +40,10 @@ public class MealTo {
         return calories;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
     public boolean isExcess() {
         return excess;
     }
@@ -48,6 +55,7 @@ public class MealTo {
                 ", dateTime=" + dateTime +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +
+                ", userId=" + userId +
                 ", excess=" + excess +
                 '}';
     }
