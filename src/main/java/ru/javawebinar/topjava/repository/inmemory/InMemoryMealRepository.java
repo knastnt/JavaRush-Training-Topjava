@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.util.Collection;
@@ -22,37 +23,56 @@ public class InMemoryMealRepository implements MealRepository {
     private AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.MEALS.forEach(this::save);
+        MealsUtil.MEALS.forEach(meal -> save(meal, 1));
     }
 
     @Override
-    public Meal save(Meal meal) {
+    public Meal save(Meal meal, int userId) {
         log.info("save {}", meal);
+
+        //Проверяем что у сохраняемого Meal такой же userId
+        if (meal.getUserId() != userId) return null;
 
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
-            repository.put(meal.getId(), meal);
-            return meal;
         }
-        // handle case: update, but not present in storage
-        return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+
+        //Проверяем, что у заменяемого Meal  такой же userId
+        Meal oldMeal = repository.get(meal.getId());
+        if (oldMeal != null && oldMeal.getUserId() != userId) return null;
+
+        repository.put(meal.getId(), meal);
+
+        return meal;
     }
 
     @Override
-    public boolean delete(int id) {
+    public boolean delete(int id, int userId) {
         log.info("delete {}", id);
+
+        //Проверяем, что у удаляемого Meal  такой же userId
+        Meal oldMeal = repository.get(id);
+        if (oldMeal != null && oldMeal.getUserId() != userId) return false;
+
         return repository.remove(id) != null;
     }
 
     @Override
-    public Meal get(int id) {
+    public Meal get(int id, int userId) {
         log.info("get {}", id);
-        return repository.get(id);
+        Meal meal = repository.get(id);
+        //Проверяем, что у получаемого Meal такой же userId
+        if (meal != null && meal.getUserId() == userId) {
+            return meal;
+        }else {
+            return null;
+        }
     }
 
     @Override
-    public List<Meal> getAll() {
+    public List<Meal> getAll(int userId) {
         return repository.values().stream()
+                .filter(meal -> meal.getUserId() == userId) //Проверяем, что у получаемого Meal такой же userId
                 .sorted((meal1, meal2) -> meal1.getDateTime().compareTo(meal2.getDateTime()))
                 .collect(Collectors.toList());
     }
