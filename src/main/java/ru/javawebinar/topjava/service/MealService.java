@@ -4,12 +4,8 @@ import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.ValidationUtil;
-import ru.javawebinar.topjava.util.exception.NotFoundException;
-import ru.javawebinar.topjava.web.SecurityUtil;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class MealService {
@@ -22,36 +18,28 @@ public class MealService {
 
 
     public Meal create(Meal meal, int userId) {
-        if (meal.getUserId() != userId)
-            throw new NotFoundException("Saved meal not belongs to you");
-
-        if (!meal.isNew()) {
-            //Проверка прав при изменении. Выбрасывает исключение если прав нет на уже существующий Meal в БД
-            this.get(meal.getId(), userId);
-        }
-
-        return repository.save(meal);
+        //Проверяем что объект новый и кидаем IllegalArgumentException если не новый
+        ValidationUtil.checkNew(meal);
+        //Преверяем что userId сохраняемого Meal соответствует аутентифицированному пользователю
+        return ValidationUtil.checkNotFound(repository.save(meal, userId), "New entity not belongs to authenticated user");
     }
 
     public void delete(int id, int userId) {
-        //Проверка прав при удалении. Выбрасывает исключение если прав нет либо если объекта с таким id нет
-        Meal meal = this.get(id, userId);
-        repository.delete(id);
+        //Бросаем NotFoundException если не найдено
+        ValidationUtil.checkNotFoundWithId(repository.delete(id, userId), id);
     }
 
     public Meal get(int id, int userId) {
-        Meal meal = ValidationUtil.checkNotFoundWithId(repository.get(id), id);
-        if (userId != meal.getUserId()) throw new NotFoundException("This meal not belongs to you");
-        return meal;
+        //Бросаем NotFoundException если не найдено
+        return ValidationUtil.checkNotFoundWithId(repository.get(id, userId), id);
     }
 
     public List<Meal> getAll(int userId) {
-        return repository.getAll().stream()
-                .filter(meal -> meal.getUserId() == userId)
-                .collect(Collectors.toList());
+        return repository.getAll(userId);
     }
 
     public void update(Meal meal, int userId) {
-        this.create(meal, userId);
+        //Преверяем что userId обновляемого Meal соответствует аутентифицированному пользователю
+        ValidationUtil.checkNotFoundWithId(repository.save(meal, userId), meal.getId());
     }
 }
