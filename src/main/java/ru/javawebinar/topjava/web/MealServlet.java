@@ -21,7 +21,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Objects;
@@ -102,7 +106,12 @@ public class MealServlet extends HttpServlet {
             default:
                 log.info("getAll");
                 request.setAttribute("meals",
-                        MealsUtil.getTos(mealRestController.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                        MealsUtil.getTos(
+                                mealRestController.getAll(getStartDate(request),getEndDate(request)),
+                                MealsUtil.DEFAULT_CALORIES_PER_DAY,
+                                getStartTime(request),
+                                getEndTime(request)
+                        ));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }
@@ -111,5 +120,47 @@ public class MealServlet extends HttpServlet {
     private int getId(HttpServletRequest request) {
         String paramId = Objects.requireNonNull(request.getParameter("id"));
         return Integer.parseInt(paramId);
+    }
+
+
+
+    private LocalDate getStartDate(HttpServletRequest request) {
+        String startDate = request.getParameter("startDate");
+        return parseLocalDate(startDate, LocalDate.MIN);
+    }
+
+    private LocalDate getEndDate(HttpServletRequest request) {
+        String endDate = request.getParameter("endDate");
+        return parseLocalDate(endDate, LocalDate.MAX);
+    }
+
+    private LocalTime getStartTime(HttpServletRequest request) {
+        String startTime = request.getParameter("startTime");
+        return parseLocalTime(startTime, LocalTime.MIN);
+    }
+
+    private LocalTime getEndTime(HttpServletRequest request) {
+        String endTime = request.getParameter("endTime");
+        return parseLocalTime(endTime, LocalTime.MAX);
+    }
+
+
+
+    private LocalDate parseLocalDate(String s, LocalDate defaultIfException){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[dd-MM-yyyy][dd.MM.yyyy][dd,MM,yyyy][yyyy-MM-dd][yyyy.MM.dd][yyyy,MM,dd]");
+        try {
+            return LocalDate.parse(s, formatter);
+        }catch (NullPointerException | DateTimeParseException e){
+            return defaultIfException;
+        }
+    }
+
+    private LocalTime parseLocalTime(String s, LocalTime defaultIfException){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[HH:mm][HH-mm][HH.mm][HH,mm]");
+        try {
+            return LocalTime.parse(s, formatter);
+        }catch (NullPointerException | DateTimeParseException e){
+            return defaultIfException;
+        }
     }
 }
