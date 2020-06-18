@@ -21,6 +21,9 @@
     <h3><a href="index.html">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
+    <%
+        System.out.println("hhhgfgfhgfhgf");
+    %>
     <div>
         <div>
             <form id="filter" method="get" action="meals">
