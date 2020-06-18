@@ -3,11 +3,17 @@ package ru.javawebinar.topjava.web;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.Role;
+import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.repository.inmemory.InMemoryMealRepository;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.meal.MealRestController;
+import ru.javawebinar.topjava.web.user.AdminRestController;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -17,19 +23,41 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
 
-    private MealRepository repository;
-    private MealService mealService;
+//    @Autowired
+//    private MealRepository repository;
+//    @Autowired
+//    private MealService mealService;
+    private MealRestController mealRestController;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        repository = new InMemoryMealRepository();
-        mealService = new MealService(repository);
+//        repository = new InMemoryMealRepository();
+//        mealService = new MealService(repository);
+
+        // Spring инициализация
+        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
+            mealRestController = appCtx.getBean(MealRestController.class); //Autowired не работает, т.к. этот сервлет не помечен стереотипом
+
+//            System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
+//            AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
+//            adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Role.ADMIN));
+//
+//            MealRestController mrc = appCtx.getBean(MealRestController.class);
+//            mrc.create(new Meal(null, LocalDateTime.now(), "конфетка", 15));
+//            mrc.getAll().forEach(System.out::println);
+
+
+
+            MealsUtil.MEALS.forEach(meal -> mealRestController.create(meal));
+        }
+
     }
 
     @Override
@@ -44,9 +72,9 @@ public class MealServlet extends HttpServlet {
 
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
         if (meal.isNew()) {
-            mealService.create(meal, SecurityUtil.authUserId());
+            mealRestController.create(meal);
         } else {
-            mealService.update(meal, SecurityUtil.authUserId());
+            mealRestController.update(meal, meal.getId());
         }
         response.sendRedirect("meals");
     }
@@ -59,14 +87,14 @@ public class MealServlet extends HttpServlet {
             case "delete":
                 int id = getId(request);
                 log.info("Delete {}", id);
-                mealService.delete(id, SecurityUtil.authUserId());
+                mealRestController.delete(id);
                 response.sendRedirect("meals");
                 break;
             case "create":
             case "update":
                 final Meal meal = "create".equals(action) ?
                         new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
-                        mealService.get(getId(request), SecurityUtil.authUserId());
+                        mealRestController.get(getId(request));
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
@@ -74,7 +102,7 @@ public class MealServlet extends HttpServlet {
             default:
                 log.info("getAll");
                 request.setAttribute("meals",
-                        MealsUtil.getTos(mealService.getAll(SecurityUtil.authUserId()), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                        MealsUtil.getTos(mealRestController.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }

@@ -24,9 +24,6 @@ public class InMemoryMealRepository implements MealRepository {
     private Map<Integer, Meal> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
 
-    {
-        MealsUtil.MEALS.forEach(meal -> save(meal, 1));
-    }
 
     @Override
     public Meal save(Meal meal, int userId) {
