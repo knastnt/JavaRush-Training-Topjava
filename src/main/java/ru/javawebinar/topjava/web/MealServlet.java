@@ -33,35 +33,24 @@ import java.util.Objects;
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
 
-//    @Autowired
-//    private MealRepository repository;
-//    @Autowired
-//    private MealService mealService;
+    private static ConfigurableApplicationContext appCtx;
     private MealRestController mealRestController;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-//        repository = new InMemoryMealRepository();
-//        mealService = new MealService(repository);
 
         // Spring инициализация
-        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
-            mealRestController = appCtx.getBean(MealRestController.class); //Autowired не работает, т.к. этот сервлет не помечен стереотипом
+        appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        mealRestController = appCtx.getBean(MealRestController.class); //Autowired не работает, т.к. этот сервлет не помечен стереотипом
 
-//            System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
-//            AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
-//            adminUserController.create(new User(null, "userName", "email@mail.ru", "password", Role.ADMIN));
-//
-//            MealRestController mrc = appCtx.getBean(MealRestController.class);
-//            mrc.create(new Meal(null, LocalDateTime.now(), "конфетка", 15));
-//            mrc.getAll().forEach(System.out::println);
+        MealsUtil.MEALS.forEach(meal -> mealRestController.create(meal));
+    }
 
-
-
-            MealsUtil.MEALS.forEach(meal -> mealRestController.create(meal));
-        }
-
+    @Override
+    public void destroy() {
+        appCtx.close();
+        super.destroy();
     }
 
     @Override
