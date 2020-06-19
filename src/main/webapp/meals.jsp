@@ -22,7 +22,7 @@
     <hr/>
     <h2>Meals</h2>
     <%
-        System.out.println("hhhgfgfhgfhgf");
+//        System.out.println("hhhgfgfhgfhgf");
     %>
     <div>
         <div>
@@ -30,19 +30,19 @@
                 <div>
                     <div>
                         <label for="startDate">От даты (включая)</label>
-                        <input class="form-control" name="startDate" id="startDate" autocomplete="off">
+                        <input class="form-control" name="startDate" id="startDate" value="${param.startDate}">
                     </div>
                     <div>
                         <label for="endDate">До даты (включая)</label>
-                        <input class="form-control" name="endDate" id="endDate" autocomplete="off">
+                        <input class="form-control" name="endDate" id="endDate" value="${param.endDate}">
                     </div>
                     <div>
                         <label for="startTime">От времени (включая)</label>
-                        <input class="form-control" name="startTime" id="startTime" autocomplete="off">
+                        <input class="form-control" name="startTime" id="startTime" value="${param.startTime}">
                     </div>
                     <div>
                         <label for="endTime">До времени (исключая)</label>
-                        <input class="form-control" name="endTime" id="endTime" autocomplete="off">
+                        <input class="form-control" name="endTime" id="endTime" value="${param.endTime}">
                     </div>
                 </div>
             </form>
