@@ -2,6 +2,7 @@ package ru.javawebinar.topjava;
 
 import ru.javawebinar.topjava.model.Meal;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
@@ -12,6 +13,8 @@ public class MealTestData {
     public static final int NOT_FOUND_MEAL_ID = 99999;
     public static final int USER_MEAL_ID = START_SEQ + 2;
     public static final int ADMIN_MEAL_ID = START_SEQ + 3;
+
+    public static final LocalDate ONE_DAY = LocalDate.of(2020, 06, 23);
 
     public static final Meal ADMIN_MEAL = new Meal(ADMIN_MEAL_ID, LocalDateTime.of(2020, 06, 23, 15,6,1), "Админская еда", 30);
 
