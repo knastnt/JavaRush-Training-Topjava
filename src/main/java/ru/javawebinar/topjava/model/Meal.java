@@ -1,9 +1,16 @@
 package ru.javawebinar.topjava.model;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+@Getter
+@Setter
+@ToString
 public class Meal extends AbstractBaseEntity {
     private LocalDateTime dateTime;
 
@@ -24,17 +31,6 @@ public class Meal extends AbstractBaseEntity {
         this.calories = calories;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public int getCalories() {
-        return calories;
-    }
 
     public LocalDate getDate() {
         return dateTime.toLocalDate();
@@ -42,15 +38,5 @@ public class Meal extends AbstractBaseEntity {
 
     public LocalTime getTime() {
         return dateTime.toLocalTime();
-    }
-
-    @Override
-    public String toString() {
-        return "Meal{" +
-                "id=" + id +
-                ", dateTime=" + dateTime +
-                ", description='" + description + '\'' +
-                ", calories=" + calories +
-                '}';
     }
 }
