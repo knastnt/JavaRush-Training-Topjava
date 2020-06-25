@@ -64,7 +64,7 @@ public class UserServiceTest {
 
     @Test
     public void deletedNotFound() throws Exception {
-        assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND));
+        assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND_USER_ID));
     }
 
     @Test
@@ -75,7 +75,7 @@ public class UserServiceTest {
 
     @Test
     public void getNotFound() throws Exception {
-        assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND));
+        assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND_USER_ID));
     }
 
     @Test
