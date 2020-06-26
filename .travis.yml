@@ -1,0 +1,7 @@
+# paste config here
+# https://config.travis-ci.com/explore
+# https://docs.travis-ci.com/user/languages/java/
+
+language: java
+
+jdk: oraclejdk9
