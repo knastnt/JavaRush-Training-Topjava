@@ -55,6 +55,17 @@
         </plugins>
 
     </build>
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url> <!-- the https you've been looking for -->
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled> <!-- or set to true if desired, default is false -->
+            </snapshots>
+        </repository>
+    </repositories>
 
     <dependencies>
         <!-- Logging with SLF4J & LogBack -->
