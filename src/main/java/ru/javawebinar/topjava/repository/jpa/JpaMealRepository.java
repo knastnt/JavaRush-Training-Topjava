@@ -68,8 +68,11 @@ public class JpaMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-//        return em.createQuery("SELECT m FROM Meal m WHERE user_id=:id AND m.dateTime BETWEEN :start AND :end ORDER BY m.dateTime DESC", Meal.class)
-        return em.createQuery("SELECT m FROM Meal m WHERE m.user.id=:id AND m.dateTime BETWEEN :startDateTime AND :endDateTime", Meal.class)
+        return em.createQuery("SELECT m FROM Meal m WHERE" +
+                " m.user.id=:id" +
+                " AND m.dateTime BETWEEN :startDateTime AND :endDateTime" +
+                " AND m.dateTime <> :endDateTime" +
+                " ORDER BY m.dateTime DESC", Meal.class)
                 .setParameter("id", userId)
                 .setParameter("startDateTime", startDateTime)
                 .setParameter("endDateTime", endDateTime)
