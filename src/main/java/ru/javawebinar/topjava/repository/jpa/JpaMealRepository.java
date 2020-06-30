@@ -27,12 +27,12 @@ public class JpaMealRepository implements MealRepository {
     public Meal save(Meal meal, int userId) {
         //Чтобы не делать лишнего обращения в БД и не вытягивать юзера, делаем прокси ссылку
         User ref = em.getReference(User.class, userId);
+        meal.setUser(ref);
 
         if (meal.isNew()){
-            meal.setUser(ref);
             em.persist(meal);
         }else{
-            if (meal.getUser() == null || userId != meal.getUser().getId()) return null;
+            if (get(meal.getId(), userId) == null) return null;
             meal = em.merge(meal);
         }
         em.flush();
