@@ -34,17 +34,16 @@ public class DataJpaMealRepository implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        return crudMealRepository.get(id, userId);
+        return crudMealRepository.getByIdAndUserId(id, userId);
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        return crudMealRepository.getAll(userId);
+        return crudMealRepository.getAllByUserIdOrderByDateTimeDesc(userId);
     }
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-        return crudMealRepository.getBetweenHalfOpen(startDateTime, endDateTime, userId);
-//        return null;
+        return crudMealRepository.getAllByUserIdAndDateTimeIsGreaterThanEqualAndDateTimeIsLessThanOrderByDateTimeDesc(userId, startDateTime, endDateTime);
     }
 }
