@@ -105,6 +105,12 @@ abstract public class UserServiceTest {
     }
 
     @Test
+    public void getWithMeals() throws Exception {
+        User user = service.getWithMeals(USER_ID);
+        USER_MATCHER.assertMatch(user, USER);
+    }
+
+    @Test
     public void getNotFound() throws Exception {
         assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND));
     }
