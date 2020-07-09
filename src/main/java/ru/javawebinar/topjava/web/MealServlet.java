@@ -29,9 +29,12 @@ public class MealServlet extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) throws ServletException {
-        System.setProperty("spring.profiles.active", String.join(",", Profiles.getActiveDbProfile()));
+//        System.setProperty("spring.profiles.active", String.join(",", Profiles.getActiveDbProfile()));
         super.init(config);
-        springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
+//        springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
+        springContext = new ClassPathXmlApplicationContext(new String[]{"spring/spring-app.xml", "spring/spring-db.xml"}, false);
+        springContext.getEnvironment().setActiveProfiles(Profiles.getActiveDbProfile());
+        springContext.refresh();
         mealController = springContext.getBean(MealRestController.class);
     }
 
