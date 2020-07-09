@@ -27,6 +27,8 @@ import static org.slf4j.LoggerFactory.getLogger;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
+import static ru.javawebinar.topjava.UserTestData.ADMIN;
+import static ru.javawebinar.topjava.UserTestData.USER_MATCHER;
 
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
@@ -93,6 +95,13 @@ abstract public class MealServiceTest {
     public void get() throws Exception {
         Meal actual = service.get(ADMIN_MEAL_ID, ADMIN_ID);
         MEAL_MATCHER.assertMatch(actual, ADMIN_MEAL1);
+    }
+
+    @Test
+    public void getWithUser() throws Exception {
+        Meal actual = service.getWithUser(ADMIN_MEAL_ID, ADMIN_ID);
+        MEAL_MATCHER.assertMatch(actual, ADMIN_MEAL1);
+        USER_MATCHER.assertMatch(ADMIN, actual.getUser());
     }
 
     @Test
