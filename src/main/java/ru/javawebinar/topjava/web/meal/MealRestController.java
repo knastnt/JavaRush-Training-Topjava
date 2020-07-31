@@ -1,19 +1,16 @@
 package ru.javawebinar.topjava.web.meal;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
-import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
-import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 
 @RestController
 @RequestMapping(value = MealRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -28,17 +25,13 @@ public class MealRestController extends AbstractMealController {
     }
 
     @GetMapping("/filter")
-    public List<MealTo> getBetweenStrings(
-            @RequestParam(required = false) String startDate,
-            @RequestParam(required = false) String startTime,
-            @RequestParam(required = false) String endDate,
-            @RequestParam(required = false) String endTime
+    public List<MealTo> getBetweenTimes(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime endTime
     ) {
-        LocalDate _startDate = parseLocalDate(startDate);
-        LocalDate _endDate = parseLocalDate(endDate);
-        LocalTime _startTime = parseLocalTime(startTime);
-        LocalTime _endTime = parseLocalTime(endTime);
-        return super.getBetween(_startDate, _startTime, _endDate, _endTime);
+        return super.getBetween(startDate, startTime, endDate, endTime);
     }
 
     @Override
