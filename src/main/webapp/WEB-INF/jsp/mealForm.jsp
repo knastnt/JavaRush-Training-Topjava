@@ -10,25 +10,29 @@
 <section>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
 <%--    `meal.new` cause javax.el.ELException - bug tomcat --%>
-    <h3><spring:message code="${meal.isNew() ? 'meal.add' : 'meal.edit'}"/></h3>
-    <hr>
-    <form method="post" action="meals">
-        <input type="hidden" name="id" value="${meal.id}">
-        <dl>
-            <dt><spring:message code="meal.dateTime"/>:</dt>
-            <dd><input type="datetime-local" value="${meal.dateTime}" name="dateTime" required></dd>
-        </dl>
-        <dl>
-            <dt><spring:message code="meal.description"/>:</dt>
-            <dd><input type="text" value="${meal.description}" size=40 name="description" required></dd>
-        </dl>
-        <dl>
-            <dt><spring:message code="meal.calories"/>:</dt>
-            <dd><input type="number" value="${meal.calories}" name="calories" required></dd>
-        </dl>
-        <button type="submit"><spring:message code="common.save"/></button>
-        <button onclick="window.history.back()" type="button"><spring:message code="common.cancel"/></button>
-    </form>
+    <div class="jumbotron pt-4">
+        <div class="container">
+            <h3 class="text-center"><spring:message code="${meal.isNew() ? 'meal.add' : 'meal.edit'}"/></h3>
+            <hr>
+            <form method="post" action="meals">
+                <input type="hidden" name="id" value="${meal.id}">
+                <div class="form-group">
+                    <label for="dateTime"><spring:message code="meal.dateTime"/>:</label>
+                    <input class="form-control" id="dateTime" type="datetime-local" name="dateTime" value="${meal.dateTime}" required>
+                </div>
+                <div class="form-group">
+                    <label for="description"><spring:message code="meal.description"/>:</label>
+                    <input class="form-control" id="description" type="text" size=40 name="description" value="${meal.description}" required>
+                </div>
+                <div class="form-group">
+                    <label for="calories"><spring:message code="meal.calories"/>:</label>
+                    <input class="form-control" id="calories" type="number" name="calories" value="${meal.calories}" required>
+                </div>
+                <button type="submit" class="btn btn-primary"><spring:message code="common.save"/></button>
+                <button onclick="window.history.back()" type="button" class="btn btn-secondary"><spring:message code="common.cancel"/></button>
+            </form>
+        </div>
+    </div>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
