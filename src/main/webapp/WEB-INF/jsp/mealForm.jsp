@@ -14,7 +14,7 @@
         <div class="container">
             <h3 class="text-center"><spring:message code="${meal.isNew() ? 'meal.add' : 'meal.edit'}"/></h3>
             <hr>
-            <form method="post" action="meals">
+            <form method="post" action="meals" id="detailsForm">
                 <input type="hidden" name="id" value="${meal.id}">
                 <div class="form-group">
                     <label for="dateTime"><spring:message code="meal.dateTime"/>:</label>

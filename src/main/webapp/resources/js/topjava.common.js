@@ -33,13 +33,26 @@ function deleteRow(id) {
 }
 
 function updateTable() {
-    $.get(context.ajaxUrl, function (data) {
+    // $.get(context.ajaxUrl, function (data) {
+    //     context.datatableApi.clear().rows.add(data).draw();
+    // });
+
+    $.ajax({
+        headers: {
+            Accept: "application/json"
+        },
+        type: "GET",
+        url: context.ajaxUrl
+    }).done(function (data) {
         context.datatableApi.clear().rows.add(data).draw();
     });
 }
 
 function save() {
     $.ajax({
+        headers: {
+            Accept: "application/json"
+        },
         type: "POST",
         url: context.ajaxUrl,
         data: form.serialize()
