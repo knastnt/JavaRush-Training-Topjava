@@ -61,7 +61,8 @@
                         </td>
                         <td>${meal.description}</td>
                         <td>${meal.calories}</td>
-                        <td><a href="meals/update?id=${meal.id}" class="btn"><span class="fa fa-pencil"></span></a></td>
+<%--                        <td><a href="meals/update?id=${meal.id}" class="btn"><span class="fa fa-pencil"></span></a></td>--%>
+                        <td><a class="btn"><span class="fa fa-pencil" onclick="edit(${meal.id})"></span></a></td>
                         <td><a class="delete" id="${meal.id}"><span class="fa fa-remove"></span></a></td>
                     </tr>
                 </c:forEach>
@@ -92,7 +93,7 @@
                         <label for="calories"><spring:message code="meal.calories"/>:</label>
                         <input class="form-control" id="calories" type="number" name="calories" value="${meal.calories}" required>
                     </div>
-                    <button type="submit" class="btn btn-primary" onclick="save()"><spring:message code="common.save"/></button>
+                    <a class="btn btn-primary" onclick="save()"><spring:message code="common.save"/></a>
                 </form>
             </div>
         </div>

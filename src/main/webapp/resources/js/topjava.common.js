@@ -22,6 +22,12 @@ function add() {
     $("#editRow").modal();
 }
 
+function edit(id) {
+    form.find(":input").val("");
+    form.find(":input[name =\"id\"]").val(id);
+    $("#editRow").modal();
+}
+
 function deleteRow(id) {
     $.ajax({
         url: context.ajaxUrl + id,

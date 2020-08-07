@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.web.user.AbstractUserController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,19 +32,18 @@ public class ProfileMealUIController extends AbstractMealController {
         super.delete(id);
     }
 
-//    @PostMapping
-//    @ResponseStatus(value = HttpStatus.NO_CONTENT)
-//    public void createOrUpdate(@RequestBody Meal meal) {
-//
-////        Meal newMeal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS), "", 1000);
-//        if (meal.isNew()) {
-//            super.create(meal);
-//        }
-//    }
-
     @PostMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void createOrUpdate(HttpServletRequest request) {
-        System.out.println();
+    public void createOrUpdate(@RequestParam Integer id,
+                               @RequestParam String description,
+                               @RequestParam String dateTime,
+                               @RequestParam int calories) {
+
+        Meal meal = new Meal(id, DateTimeUtil.parseLocalDateTime(dateTime), description, calories);
+        if (meal.isNew()) {
+            super.create(meal);
+        }else{
+            super.update(meal,meal.getId());
+        }
     }
 }
