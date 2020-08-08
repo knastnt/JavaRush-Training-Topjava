@@ -3,9 +3,12 @@ var context, form;
 function makeEditable(ctx) {
     context = ctx;
     form = $('#detailsForm');
+    $(".edit").click(function () {
+        editRow($(this).closest("tr").attr("data-id"));
+    });
     $(".delete").click(function () {
         if (confirm('Are you sure?')) {
-            deleteRow($(this).attr("id"));
+            deleteRow($(this).closest("tr").attr("data-id"));
         }
     });
 
@@ -22,11 +25,7 @@ function add() {
     $("#editRow").modal();
 }
 
-function edit(id) {
-    form.find(":input").val("");
-    form.find(":input[name =\"id\"]").val(id);
-    $("#editRow").modal();
-}
+
 
 function deleteRow(id) {
     $.ajax({
@@ -36,6 +35,11 @@ function deleteRow(id) {
         updateTable();
         successNoty("Deleted");
     });
+}
+
+function editRow(id) {
+    fillFields(form, id);
+    $("#editRow").modal();
 }
 
 function updateTable() {

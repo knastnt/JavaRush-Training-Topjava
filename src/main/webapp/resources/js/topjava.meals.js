@@ -34,3 +34,11 @@ $(function () {
         }
     );
 });
+
+function fillFields(form, id) {
+    var tds = $("#datatable").find("tr[data-id =\"" + id + "\"]").find("td");
+    form.find(":input[name=\"id\"]").val(id);
+    form.find(":input[name=\"dateTime\"]").val($(tds)[0].innerText);
+    form.find(":input[name=\"description\"]").val($(tds)[1].innerText);
+    form.find(":input[name=\"calories\"]").val($(tds)[2].innerText);
+}
