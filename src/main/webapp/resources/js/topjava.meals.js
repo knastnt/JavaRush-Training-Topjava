@@ -44,13 +44,18 @@ function fillFields(form, id) {
 }
 
 function filter() {
-    var re = "/filter",
-        str = window.location.href;
+    var url = new URL(window.location.href);
 
-    var url = new URL(str.replace(re, ""));
+    str = url.origin + url.pathname;
 
-    var params = $('#filterForm :input[value!=""]').serialize();
+    var newUrl = str.replace(/\/filter[/]*$/i, "");
+
+    var params = $('#filterForm input').filter(function(){
+        return $(this).val();
+    }).serialize();;
+
     if (params) { params = "/filter?" + params; }
-    window.location.href = url.origin + url.pathname + params;
+    // window.location.href = url.origin + url.pathname + params;
+    history.pushState(null, '', newUrl + params);
     updateTable();
 }
