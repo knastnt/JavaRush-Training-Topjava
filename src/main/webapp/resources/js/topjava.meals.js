@@ -42,3 +42,15 @@ function fillFields(form, id) {
     form.find(":input[name=\"description\"]").val($(tds)[1].innerText);
     form.find(":input[name=\"calories\"]").val($(tds)[2].innerText);
 }
+
+function filter() {
+    var re = "/filter",
+        str = window.location.href;
+
+    var url = new URL(str.replace(re, ""));
+
+    var params = $('#filterForm :input[value!=""]').serialize();
+    if (params) { params = "/filter?" + params; }
+    window.location.href = url.origin + url.pathname + params;
+    updateTable();
+}

@@ -52,7 +52,7 @@ function updateTable() {
             Accept: "application/json"
         },
         type: "GET",
-        url: context.ajaxUrl
+        url: context.ajaxUrl + "filter?" + $('#filterForm :input[value!=""]').serialize()
     }).done(function (data) {
         context.datatableApi.clear().rows.add(data).draw();
     });
