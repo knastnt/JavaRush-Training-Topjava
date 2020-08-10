@@ -59,3 +59,8 @@ function filter() {
     history.pushState(null, '', newUrl + params);
     updateTable();
 }
+
+function clearFilter() {
+    $('#filterForm').find(":input").val("");
+    filter();
+}

@@ -33,6 +33,7 @@
                 </div>
                 <button type="submit" class="btn btn-secondary"><spring:message code="meal.filter"/></button>
                 <a onclick="filter()" class="btn btn-secondary"><spring:message code="meal.filter"/> AJAX</a>
+                <a onclick="clearFilter()" class="btn btn-link"><spring:message code="meal.filterClear"/> AJAX</a>
             </form>
             <hr>
             <a href="meals/create" class="btn btn-primary"><spring:message code="meal.add"/></a>
