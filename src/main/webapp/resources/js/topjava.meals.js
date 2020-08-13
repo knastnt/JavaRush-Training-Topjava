@@ -59,4 +59,5 @@ $(function () {
         }),
         updateTable: updateFilteredTable
     });
+    initializeDataTimePicker();
 });

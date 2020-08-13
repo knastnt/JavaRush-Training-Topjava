@@ -8,7 +8,15 @@ function makeEditable(ctx) {
     });
 
     // solve problem with cache in IE: https://stackoverflow.com/a/4303862/548473
-    $.ajaxSetup({cache: false});
+    $.ajaxSetup({
+        cache: false,
+        converters: {
+        "mycustomtype json": function( result ) {
+            // Какие то действия
+            return newresult;
+        }
+    }
+    });
 }
 
 function add() {
@@ -93,4 +101,19 @@ function renderDeleteBtn(data, type, row) {
     if (type === "display") {
         return "<a onclick='deleteRow(" + row.id + ");'><span class='fa fa-remove'></span></a>";
     }
+}
+
+function initializeDataTimePicker() {
+    $('input[type=datetime-local]').prop('type','text').datetimepicker({
+        timepicker:false,
+        format:'Y-m-d H:i:s',
+    });
+    $('input[type=date]').prop('type','text').datetimepicker({
+        timepicker:false,
+        format:'d-m-Y',
+    });
+    $('input[type=time]').prop('type','text').datetimepicker({
+        datepicker:false,
+        format:'H:i',
+    });
 }
