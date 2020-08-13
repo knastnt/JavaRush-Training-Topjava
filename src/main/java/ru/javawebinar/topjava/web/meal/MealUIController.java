@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.MealTo;
 
 import java.time.LocalDate;
@@ -16,6 +17,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/profile/meals")
 public class MealUIController extends AbstractMealController {
+
+    @Override
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Meal get(@PathVariable int id) {
+        return super.get(id);
+    }
 
     @Override
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -39,6 +46,8 @@ public class MealUIController extends AbstractMealController {
         Meal meal = new Meal(id, dateTime, description, calories);
         if (meal.isNew()) {
             super.create(meal);
+        }else{
+            super.update(meal, id);
         }
     }
 
