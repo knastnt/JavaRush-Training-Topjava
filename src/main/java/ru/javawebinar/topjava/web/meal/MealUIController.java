@@ -40,12 +40,12 @@ public class MealUIController extends AbstractMealController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createOrUpdate(@Valid Meal meal, BindingResult result) throws BindException {
-        if (result.hasErrors()) {
-            // TODO change to exception handler
-//            return ValidationUtil.getErrorResponse(result);
-            throw new BindException(result);
-        }
+    public ResponseEntity<String> createOrUpdate(@Valid Meal meal/*, BindingResult result*/) throws BindException {
+//        if (result.hasErrors()) {
+//            // TODO change to exception handler
+////            return ValidationUtil.getErrorResponse(result);
+//            throw new BindException(result);
+//        }
         if (meal.isNew()) {
             super.create(meal);
         } else {

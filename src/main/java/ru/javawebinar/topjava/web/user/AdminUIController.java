@@ -38,12 +38,12 @@ public class AdminUIController extends AbstractUserController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createOrUpdate(@Valid UserTo userTo, BindingResult result) throws BindException {
-        if (result.hasErrors()) {
-            // TODO change to exception handler
-            throw new BindException(result);
-//            return ValidationUtil.getErrorResponse(result);
-        }
+    public ResponseEntity<String> createOrUpdate(@Valid UserTo userTo/*, BindingResult result*/) throws BindException {
+//        if (result.hasErrors()) {
+//            // TODO change to exception handler
+//            throw new BindException(result);
+////            return ValidationUtil.getErrorResponse(result);
+//        }
         if (userTo.isNew()) {
             super.create(userTo);
         } else {
