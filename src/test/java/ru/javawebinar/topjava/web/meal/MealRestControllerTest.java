@@ -5,23 +5,33 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.javawebinar.topjava.MealTestData;
+import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.BiConsumer;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.TestUtil.readFromJson;
 import static ru.javawebinar.topjava.TestUtil.userHttpBasic;
-import static ru.javawebinar.topjava.UserTestData.USER;
-import static ru.javawebinar.topjava.UserTestData.USER_ID;
+import static ru.javawebinar.topjava.UserTestData.*;
 import static ru.javawebinar.topjava.util.MealsUtil.createTo;
 import static ru.javawebinar.topjava.util.MealsUtil.getTos;
 
@@ -95,6 +105,32 @@ class MealRestControllerTest extends AbstractControllerTest {
         newMeal.setId(newId);
         MEAL_MATCHER.assertMatch(created, newMeal);
         MEAL_MATCHER.assertMatch(mealService.get(newId, USER_ID), newMeal);
+    }
+
+    @Test
+    void createAndUpdateNotValid() throws Exception {
+        Map<BiConsumer<Meal, Object>, Set<Object>> testData = new HashMap<>();
+        testData.put((meal, s) -> meal.setDescription((String) s), Set.of("", " ", "N"));
+        testData.put((meal, s) -> meal.setCalories((int) s), Set.of(-100, -1, 0, 1, 5, 9, 5001));
+
+        for (Map.Entry<BiConsumer<Meal, Object>, Set<Object>> entry : testData.entrySet()) {
+            for (Object s : entry.getValue()) {
+                Meal newMeal = MealTestData.getNew();
+                entry.getKey().accept(newMeal, s);
+
+                for (MockHttpServletRequestBuilder mHSRB : new MockHttpServletRequestBuilder[]{put(REST_URL + MEAL1_ID), post(REST_URL)}) {
+                    perform(mHSRB
+                            .with(userHttpBasic(USER))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(JsonUtil.writeValue(newMeal)))
+                            .andExpect(status().isUnprocessableEntity());
+                }
+
+            }
+        }
+
+
+
     }
 
     @Test
