@@ -4,16 +4,25 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.UserService;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
-import ru.javawebinar.topjava.web.json.JsonUtil;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -90,7 +99,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         User updated = getUpdated();
-        perform(MockMvcRequestBuilders.put(REST_URL + USER_ID)
+        perform(put(REST_URL + USER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(UserTestData.jsonWithPassword(updated, updated.getPassword())))
@@ -100,9 +109,33 @@ class AdminRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void createAndUpdateNotValid() throws Exception {
+        Map<BiConsumer<User, String>, Set<String>> testData = new HashMap<>();
+        testData.put((user, s) -> user.setName(s), Set.of("", " ", "N"));
+        testData.put((user, s) -> user.setEmail(s), Set.of("", " ", "N", "dsfsdgsd", "sdgsd@.sdggs", "@dsggf.re"));
+        testData.put((user, s) -> user.setCaloriesPerDay(Integer.valueOf(s)), Set.of("-100", "-1", "0", "1", "5", "9", "10001"));
+
+        for (Map.Entry<BiConsumer<User, String>, Set<String>> entry : testData.entrySet()) {
+            for (String s : entry.getValue()) {
+                User user = getNew();
+                entry.getKey().accept(user, s);
+
+                for (MockHttpServletRequestBuilder mHSRB : new MockHttpServletRequestBuilder[]{put(REST_URL + USER_ID), post(REST_URL)}) {
+                    perform(mHSRB
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .with(userHttpBasic(ADMIN))
+                            .content(UserTestData.jsonWithPassword(user, user.getPassword())))
+                            .andExpect(status().isUnprocessableEntity());
+                }
+
+            }
+        }
+    }
+
+    @Test
     void createWithLocation() throws Exception {
         User newUser = getNew();
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+        ResultActions action = perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(userHttpBasic(ADMIN))
                 .content(UserTestData.jsonWithPassword(newUser, "newPass")))
